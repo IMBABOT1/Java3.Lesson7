@@ -1,8 +1,12 @@
 import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class TestStarter {
 
     private static void start(Class test) throws Exception {
+        HashMap<Class, Integer> map = new HashMap<>();
         int beforeCount = 0;
         int afterCount = 0;
         int p = 0;
@@ -20,20 +24,16 @@ public class TestStarter {
                 throw new RuntimeException("Beforecount: " + beforeCount + " " + "Aftercount" + afterCount);
             }
             if (m.isAnnotationPresent(BeforeSuite.class)){
-                p = m.getAnnotation(BeforeSuite.class).priority();
+                map.put(BeforeSuite.class, m.getAnnotation(BeforeSuite.class).priority());
             }
             if (m.isAnnotationPresent(AfterSuite.class)){
-                a = m.getAnnotation(AfterSuite.class).priority();
+                map.put(AfterSuite.class, m.getAnnotation(AfterSuite.class).priority());
             }
-            if (m.isAnnotationPresent(BeforeSuite.class)){
-                m.invoke(null);
-            }
-            if (m.isAnnotationPresent(Test.class) && m.getAnnotation(Test.class).priority() == 9){
-                m.invoke(null);
-            }
-
         }
+
+        System.out.println(map);
     }
+
 
 
 
