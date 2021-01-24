@@ -12,10 +12,7 @@ public class TestStarter {
         int afterCount = 0;
         Class c = TestClass.class;
         Method[] methods = c.getDeclaredMethods();
-        int first = methods.length;
-        int second = methods.length - 1;
-        System.out.println(first);
-        System.out.println(second);
+
 
         Method[] temp = new Method[methods.length];
         for (Method m : methods) {
@@ -28,8 +25,8 @@ public class TestStarter {
             if (beforeCount > 1 || afterCount > 1) {
                 throw new RuntimeException("Beforecount: " + beforeCount + " " + "Aftercount" + afterCount);
             }
-            if (m.isAnnotationPresent(BeforeSuite.class) && m.getAnnotation(BeforeSuite.class).priority() == first) {
-                temp[second] = m;
+            if (m.isAnnotationPresent(BeforeSuite.class) && m.getAnnotation(BeforeSuite.class).priority() == 10) {
+                temp[9] = m;
             }
             if (m.isAnnotationPresent(AfterSuite.class) && m.getAnnotation(AfterSuite.class).priority() == 1) {
                 temp[0] = m;
@@ -60,9 +57,10 @@ public class TestStarter {
             }
         }
 
-//        for (int i = 0; i <temp.length ; i++) {
-//            temp[i].invoke(null);
-//        }
+
+        for (int i = temp.length - 1; i >= 0; i--) {
+            temp[i].invoke(null);
+        }
     }
 
 
