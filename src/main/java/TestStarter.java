@@ -1,5 +1,6 @@
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -9,10 +10,14 @@ public class TestStarter {
         HashMap<Integer, Class> map = new HashMap<>();
         int beforeCount = 0;
         int afterCount = 0;
-        int p = 0;
-        int a = 0;
         Class c = TestClass.class;
         Method[] methods = c.getDeclaredMethods();
+        int first = methods.length;
+        int second = methods.length - 1;
+        System.out.println(first);
+        System.out.println(second);
+
+        Method[] temp = new Method[methods.length];
         for (Method m : methods) {
             if (m.isAnnotationPresent(BeforeSuite.class)) {
                 beforeCount++;
@@ -23,19 +28,41 @@ public class TestStarter {
             if (beforeCount > 1 || afterCount > 1) {
                 throw new RuntimeException("Beforecount: " + beforeCount + " " + "Aftercount" + afterCount);
             }
-            if (m.isAnnotationPresent(BeforeSuite.class)) {
-                map.put(m.getAnnotation(BeforeSuite.class).priority(), BeforeSuite.class);
+            if (m.isAnnotationPresent(BeforeSuite.class) && m.getAnnotation(BeforeSuite.class).priority() == first) {
+                temp[second] = m;
             }
-            if (m.isAnnotationPresent(AfterSuite.class)) {
-                map.put(m.getAnnotation(AfterSuite.class).priority(), AfterSuite.class);
+            if (m.isAnnotationPresent(AfterSuite.class) && m.getAnnotation(AfterSuite.class).priority() == 1) {
+                temp[0] = m;
             }
-            if (m.isAnnotationPresent(Test.class)) {
-                map.put(m.getAnnotation(Test.class).priority(), Test.class);
+            if (m.isAnnotationPresent(Test.class) && m.getAnnotation(Test.class).priority() == 2) {
+                temp[1] = m;
+            }
+            if (m.isAnnotationPresent(Test.class) && m.getAnnotation(Test.class).priority() == 3) {
+                temp[2] = m;
+            }
+            if (m.isAnnotationPresent(Test.class) && m.getAnnotation(Test.class).priority() == 4) {
+                temp[3] = m;
+            }
+            if (m.isAnnotationPresent(Test.class) && m.getAnnotation(Test.class).priority() == 5) {
+                temp[4] = m;
+            }
+            if (m.isAnnotationPresent(Test.class) && m.getAnnotation(Test.class).priority() == 6) {
+                temp[5] = m;
+            }
+            if (m.isAnnotationPresent(Test.class) && m.getAnnotation(Test.class).priority() == 7) {
+                temp[6] = m;
+            }
+            if (m.isAnnotationPresent(Test.class) && m.getAnnotation(Test.class).priority() == 8) {
+                temp[7] = m;
+            }
+            if (m.isAnnotationPresent(Test.class) && m.getAnnotation(Test.class).priority() == 9) {
+                temp[8] = m;
             }
         }
 
-        System.out.println(map);
-
+//        for (int i = 0; i <temp.length ; i++) {
+//            temp[i].invoke(null);
+//        }
     }
 
 
@@ -47,4 +74,3 @@ public class TestStarter {
         }
     }
 }
-
