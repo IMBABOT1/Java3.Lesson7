@@ -29,10 +29,16 @@ public class TestStarter {
             if (m.isAnnotationPresent(AfterSuite.class)){
                 map.put(AfterSuite.class, m.getAnnotation(AfterSuite.class).priority());
             }
-        }
+            if (m.isAnnotationPresent(Test.class) && m.getAnnotation(Test.class).priority() == 9){
+                map.put(Test.class, m.getAnnotation(Test.class).priority());
+            }
 
+
+        }
         System.out.println(map);
     }
+
+
 
 
 
