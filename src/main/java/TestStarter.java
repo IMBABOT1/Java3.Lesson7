@@ -19,43 +19,139 @@ public class TestStarter {
             }
         }
 
+        if (afterCount > 1 || beforeCount > 1){
+            throw new RuntimeException("BeforeSuite:" + " " + beforeCount + " AfterSuite: " + afterCount + "," + " " + "BeforeSuite" + " and " +  "AfterSuite" + " must be less then two");
+        }
+
         List<Method> temp = new ArrayList<>();
         Method before = null;
         Method after = null;
 
-        for (int i = 0; i < methods.length; i++) {
-          if (methods[i].isAnnotationPresent(Test.class)){
-              temp.add(methods[i]);
-          }
-        }
 
+        if (beforeCount == 1 && afterCount == 1) {
 
-        for (int i = 0; i < methods.length -1; i++) {
-            if (methods[i].isAnnotationPresent(BeforeSuite.class)){
-                before = methods[i];
-            }
-        }
-
-        for (int i = 0; i < methods.length -1; i++) {
-            if (methods[i].isAnnotationPresent(AfterSuite.class)){
-                after = methods[i];
-            }
-        }
-
-        for (int i = 0; i < temp.size() - 1; i++) {
-            for (int j = 0; j < temp.size() - 1 - i; j++) {
-                if (temp.get(j).getAnnotation(Test.class).priority() > temp.get(j + 1).getAnnotation(Test.class).priority()){
-                    Method m = temp.get(j);
-                    temp.set(j, temp.get(j + 1));
-                    temp.set(j + 1, m);
+            for (int i = 0; i < methods.length; i++) {
+                if (methods[i].isAnnotationPresent(Test.class)) {
+                    temp.add(methods[i]);
                 }
             }
-        }
-        temp.add(0, after);
-        temp.add(temp.size(), before);
 
-        for (int i = temp.size()-1; i >=0 ; i--) {
-            temp.get(i).invoke(null);
+
+            for (int i = 0; i < methods.length - 1; i++) {
+                if (methods[i].isAnnotationPresent(BeforeSuite.class)) {
+                    before = methods[i];
+                }
+            }
+
+            for (int i = 0; i < methods.length - 1; i++) {
+                if (methods[i].isAnnotationPresent(AfterSuite.class)) {
+                    after = methods[i];
+                }
+            }
+
+            for (int i = 0; i < temp.size() - 1; i++) {
+                for (int j = 0; j < temp.size() - 1 - i; j++) {
+                    if (temp.get(j).getAnnotation(Test.class).priority() > temp.get(j + 1).getAnnotation(Test.class).priority()) {
+                        Method m = temp.get(j);
+                        temp.set(j, temp.get(j + 1));
+                        temp.set(j + 1, m);
+                    }
+                }
+            }
+            temp.add(0, after);
+            temp.add(temp.size(), before);
+
+            for (int i = temp.size() - 1; i >= 0; i--) {
+                temp.get(i).invoke(null);
+            }
+        }
+
+
+        if (beforeCount == 1 && afterCount == 0) {
+
+            for (int i = 0; i < methods.length; i++) {
+                if (methods[i].isAnnotationPresent(Test.class)) {
+                    temp.add(methods[i]);
+                }
+            }
+
+
+            for (int i = 0; i < methods.length - 1; i++) {
+                if (methods[i].isAnnotationPresent(BeforeSuite.class)) {
+                    before = methods[i];
+                }
+            }
+
+
+            for (int i = 0; i < temp.size() - 1; i++) {
+                for (int j = 0; j < temp.size() - 1 - i; j++) {
+                    if (temp.get(j).getAnnotation(Test.class).priority() > temp.get(j + 1).getAnnotation(Test.class).priority()) {
+                        Method m = temp.get(j);
+                        temp.set(j, temp.get(j + 1));
+                        temp.set(j + 1, m);
+                    }
+                }
+            }
+            temp.add(temp.size(), before);
+
+            for (int i = temp.size() - 1; i >= 0; i--) {
+                temp.get(i).invoke(null);
+            }
+        }
+
+        if (beforeCount == 0 && afterCount == 1) {
+
+            for (int i = 0; i < methods.length; i++) {
+                if (methods[i].isAnnotationPresent(Test.class)) {
+                    temp.add(methods[i]);
+                }
+            }
+
+
+            for (int i = 0; i < methods.length - 1; i++) {
+                if (methods[i].isAnnotationPresent(AfterSuite.class)) {
+                    after = methods[i];
+                }
+            }
+
+            for (int i = 0; i < temp.size() - 1; i++) {
+                for (int j = 0; j < temp.size() - 1 - i; j++) {
+                    if (temp.get(j).getAnnotation(Test.class).priority() > temp.get(j + 1).getAnnotation(Test.class).priority()) {
+                        Method m = temp.get(j);
+                        temp.set(j, temp.get(j + 1));
+                        temp.set(j + 1, m);
+                    }
+                }
+            }
+            temp.add(0, after);
+
+            for (int i = temp.size() - 1; i >= 0; i--) {
+                temp.get(i).invoke(null);
+            }
+        }
+
+        if (beforeCount == 0 && afterCount == 0) {
+
+            for (int i = 0; i < methods.length; i++) {
+                if (methods[i].isAnnotationPresent(Test.class)) {
+                    temp.add(methods[i]);
+                }
+            }
+
+            for (int i = 0; i < temp.size() - 1; i++) {
+                for (int j = 0; j < temp.size() - 1 - i; j++) {
+                    if (temp.get(j).getAnnotation(Test.class).priority() > temp.get(j + 1).getAnnotation(Test.class).priority()) {
+                        Method m = temp.get(j);
+                        temp.set(j, temp.get(j + 1));
+                        temp.set(j + 1, m);
+                    }
+                }
+            }
+
+
+            for (int i = temp.size() - 1; i >= 0; i--) {
+                temp.get(i).invoke(null);
+            }
         }
 
     }
