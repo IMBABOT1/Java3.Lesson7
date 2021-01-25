@@ -5,7 +5,7 @@ import java.lang.annotation.Target;
 
 
 @Retention(RetentionPolicy.RUNTIME)
-@Target(ElementType.METHOD)
-public @interface BeforeSuite {
+@Target({ElementType.METHOD})
+public @interface Common {
     int priority();
 }
