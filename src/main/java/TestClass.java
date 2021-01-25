@@ -1,8 +1,8 @@
 public class TestClass {
-//    @BeforeSuite(priority = 10)
-//    public static void test1(){
-//        System.out.println(10);
-//    }
+    @BeforeSuite(priority = 10)
+    public static void test1(){
+        System.out.println(10);
+    }
 
     @Test(priority = 9)
     public static void test2() {
@@ -42,6 +42,10 @@ public class TestClass {
     @Test(priority = 2)
     public static void test9() {
         System.out.println(2);
+    }
+    @AfterSuite(priority = 1)
+    public static void test10(){
+        System.out.println(1);
     }
 
 }

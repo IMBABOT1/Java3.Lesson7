@@ -1,8 +1,5 @@
 import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 public class TestStarter {
 
@@ -22,26 +19,56 @@ public class TestStarter {
             }
         }
 
-        for (int i = 0; i < methods.length - 1 ; i++) {
-            for (int j = 0; j < methods.length - 1 - i; j++) {
-               if (methods[j].getAnnotation(Test.class).priority() > methods[j+1].getAnnotation(Test.class).priority()){
-                   Method temp = methods[j];
-                   methods[j] = methods[j + 1];
-                   methods[j+1] = temp;
-               }
+        List<Method> temp = new ArrayList<>();
+        Method before = null;
+        Method after = null;
+
+        for (int i = 0; i < methods.length; i++) {
+          if (methods[i].isAnnotationPresent(Test.class)){
+              temp.add(methods[i]);
+          }
+        }
+
+
+        for (int i = 0; i < methods.length -1; i++) {
+            if (methods[i].isAnnotationPresent(BeforeSuite.class)){
+                before = methods[i];
             }
         }
-    }
 
-
-
-
-
-    public static void main(String[] args) {
-        try {
-            start(TestClass.class);
-        } catch (Exception e) {
-            e.printStackTrace();
+        for (int i = 0; i < methods.length -1; i++) {
+            if (methods[i].isAnnotationPresent(AfterSuite.class)){
+                after = methods[i];
+            }
         }
+
+        for (int i = 0; i < temp.size() - 1; i++) {
+            for (int j = 0; j < temp.size() - 1 - i; j++) {
+                if (temp.get(j).getAnnotation(Test.class).priority() > temp.get(j + 1).getAnnotation(Test.class).priority()){
+                    Method m = temp.get(j);
+                    temp.set(j, temp.get(j + 1));
+                    temp.set(j + 1, m);
+                }
+            }
+        }
+        temp.add(0, after);
+        temp.add(temp.size(), before);
+
+        for (int i = temp.size()-1; i >=0 ; i--) {
+            temp.get(i).invoke(null);
+        }
+
     }
-}
+
+
+
+
+            public static void main (String[]args){
+                try {
+                    start(TestClass.class);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
